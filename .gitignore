@@ -1,0 +1,13 @@
+!/**/.gitkeep
+dev-data
+.env
+hosts.yml
+.vscode
+.idea
+docker-compose.yml
+docker-compose.*.yml
+Makefile
+tmp
+scripts/*.sh
+bin
+.toml

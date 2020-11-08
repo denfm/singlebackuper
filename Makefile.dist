@@ -1,0 +1,10 @@
+GO := /mnt/dev/golang/go1.15.3/bin/go
+.PHONY: *
+
+build:
+	@$(GO) build -v -o ./bin/singlebackuper ./cmd/backup
+
+test:
+	@$(GO) test -v -race -timeout 30s ./...
+
+.DEFAULT_GOAL := build

@@ -1,0 +1,23 @@
+log_level = "debug"
+tmp_path = "/tmp"
+target_path = "/tmp"
+time_zone = "Europe/Moscow"
+
+[remote]
+remote_ssh_host = "127.0.0.1"
+remote_ssh_user = "root"
+remote_ssh_port = 2
+remote_ssh_password = "password"
+remote_ssh_private_key = "/home/user/.ssh/id_rsa"
+remote_path = "/backup"
+
+[mongodb]
+mongodb_uri = ""
+mongodb_prefix = "mgdb"
+mongodb_host = "127.0.0.1"
+mongodb_port = 27017
+mongodb_user = "app"
+mongodb_password = "password"
+mongodb_database = "database"
+mongodb_auth_mechanism = "SCRAM-SHA-256"
+mongodb_dump_bin = "/usr/bin/mongodump"
