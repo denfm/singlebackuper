@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/denfm/singlebackuper/internal/app/cfg"
+	"github.com/denfm/singlebackuper/internal/app/lib"
 	"github.com/denfm/singlebackuper/internal/app/service"
 	"github.com/denfm/singlebackuper/internal/app/service/command"
 	"github.com/pkg/sftp"
@@ -88,7 +89,7 @@ func GetPrepareData(prefix string, config *cfg.Config) *PrepareData {
 
 func MoveArchive(p *PrepareData, config *cfg.Config) error {
 	if p.LocalArchivePath != "" {
-		err := os.Rename(p.TmpArchivePath, p.LocalArchivePath)
+		err := lib.MoveFile(p.TmpArchivePath, p.LocalArchivePath)
 		if err != nil {
 			return err
 		}
