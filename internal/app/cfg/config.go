@@ -3,6 +3,7 @@ package cfg
 import (
 	"flag"
 	"github.com/BurntSushi/toml"
+	"github.com/sirupsen/logrus"
 	"log"
 )
 
@@ -96,6 +97,14 @@ func NewConfig() *Config {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	logrusLogLevel, err := logrus.ParseLevel(config.LogLevel)
+
+	if err != nil {
+		logrusLogLevel = logrus.InfoLevel
+	}
+
+	logrus.SetLevel(logrusLogLevel)
 
 	return config
 }
