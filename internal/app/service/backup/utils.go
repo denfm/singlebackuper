@@ -1,7 +1,6 @@
 package backup
 
 import (
-	"errors"
 	"fmt"
 	"github.com/denfm/singlebackuper/internal/app/cfg"
 	"github.com/denfm/singlebackuper/internal/app/lib"
@@ -108,7 +107,7 @@ func MoveArchive(p *PrepareData, config *cfg.Config) error {
 			err := sftpClient.MkdirAll(p.RemotePath)
 
 			if err != nil {
-				return errors.New(fmt.Sprintf("mkdir error: %v", err))
+				return fmt.Errorf("mkdir error: %v", err)
 			}
 
 			rmFile, err := sftpClient.Create(p.RemoteArchivePath)
@@ -131,7 +130,7 @@ func MoveArchive(p *PrepareData, config *cfg.Config) error {
 		})
 
 		if err != nil {
-			return errors.New(fmt.Sprintf("Errors: %v. CmdCode: %d", err, CmdSftp))
+			return fmt.Errorf("Errors: %v. CmdCode: %d", err, CmdSftp)
 		}
 	}
 

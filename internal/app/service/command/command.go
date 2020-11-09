@@ -1,7 +1,6 @@
 package command
 
 import (
-	"errors"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"os/exec"
@@ -27,7 +26,7 @@ func (c *Command) Add2ArgAsSolo(d string, d2 string) {
 }
 
 func (c *Command) Create() *exec.Cmd {
-	logrus.Infof("Command <<<%s>>>", c.GetCommandString(true))
+	logrus.Debugf("Command <<<%s>>>", c.GetCommandString(true))
 	return exec.Command(c.Exec, c.Args...)
 }
 
@@ -46,7 +45,7 @@ func (c *Command) Run(code int) error {
 
 	if err != nil {
 		logrus.Error(err)
-		return errors.New(fmt.Sprintf("<<<%s>>> command failed. CmdCode: %d", c.GetCommandString(true), code))
+		return fmt.Errorf("<<<%s>>> command failed. CmdCode: %d", c.GetCommandString(true), code)
 	}
 
 	return nil
