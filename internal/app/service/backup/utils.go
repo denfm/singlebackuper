@@ -86,6 +86,19 @@ func GetPrepareData(prefix string, config *cfg.Config) *PrepareData {
 	}
 }
 
+func DefArchiveFileSize(res *service.BackupModuleResult, p *PrepareData) {
+	err, size := GetFileSize(p.TmpArchivePath)
+
+	if err != nil {
+		res.SizeMb = 0
+		res.SizeMbLabel = "ERROR!"
+		logrus.Errorf("GetFileSize error: %v", err)
+	} else {
+		res.SizeMb = float64(size / (1024 * 1024))
+		res.SizeMbLabel = fmt.Sprintf("%.1fMB", res.SizeMb)
+	}
+}
+
 func MoveArchive(p *PrepareData, config *cfg.Config) error {
 	if p.LocalArchivePath != "" {
 		err := lib.MoveFile(p.TmpArchivePath, p.LocalArchivePath)
@@ -130,7 +143,7 @@ func MoveArchive(p *PrepareData, config *cfg.Config) error {
 		})
 
 		if err != nil {
-			return fmt.Errorf("Errors: %v. CmdCode: %d", err, CmdSftp)
+			return fmt.Errorf("errors: %v. CmdCode: %d", err, CmdSftp)
 		}
 	}
 
@@ -156,6 +169,7 @@ func SuccessFinishResult(res *service.BackupModuleResult, p *PrepareData, config
 	res.DurationSeconds = duration.Seconds()
 	res.DurationLabel = fmt.Sprintf("%.1f", duration.Seconds())
 
+	logrus.Infof("Archive size: %s", res.SizeMbLabel)
 	logrus.Infof("Path: %s", rLocalPath)
 	logrus.Infof("Remote path: %s", rRsyncPath)
 	logrus.Infof("Elapsed time: %s seconds", res.DurationLabel)

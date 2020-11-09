@@ -64,6 +64,7 @@ func (g *MongodbBackupModule) Backup() *service.BackupModuleResult {
 		return res
 	}
 
+	DefArchiveFileSize(res, prepareData)
 	err = MoveArchive(prepareData, g.config)
 
 	if err != nil {
