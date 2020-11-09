@@ -152,17 +152,17 @@ func MoveArchive(p *PrepareData, config *cfg.Config) error {
 
 func SuccessFinishResult(res *service.BackupModuleResult, p *PrepareData, config *cfg.Config) {
 	res.ArchivePath = p.LocalArchivePath
-	res.RsyncArchivePath = p.RemoteArchivePath
+	res.RemoteArchivePath = p.RemoteArchivePath
 
 	rLocalPath := res.ArchivePath
-	rRsyncPath := res.RsyncArchivePath
+	rRemotePath := res.RemoteArchivePath
 
 	if rLocalPath == "" {
 		rLocalPath = "none"
 	}
 
-	if rRsyncPath == "" {
-		rRsyncPath = "none"
+	if rRemotePath == "" {
+		rRemotePath = "none"
 	}
 
 	duration := GetCurrentTime(config.TimeZone).Sub(p.TimeNow)
@@ -171,7 +171,7 @@ func SuccessFinishResult(res *service.BackupModuleResult, p *PrepareData, config
 
 	logrus.Infof("Archive size: %s", res.SizeMbLabel)
 	logrus.Infof("Path: %s", rLocalPath)
-	logrus.Infof("Remote path: %s", rRsyncPath)
+	logrus.Infof("Remote path: %s", rRemotePath)
 	logrus.Infof("Elapsed time: %s seconds", res.DurationLabel)
 	logrus.Info("Backup success!")
 }
