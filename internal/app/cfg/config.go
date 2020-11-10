@@ -34,10 +34,18 @@ type Remote struct {
 	Path          string `toml:"remote_path"`
 }
 
-// wait: @feature/backup_mysql
-//type Mysqldb struct {
-//
-//}
+type Mysqldb struct {
+	Uri      string `toml:"mysqldb_uri"`
+	Host     string `toml:"mysqldb_host"`
+	Port     int    `toml:"mysqldb_port"`
+	User     string `toml:"mysqldb_user"`
+	Password string `toml:"mysqldb_password"`
+	Database string `toml:"mysqldb_database"`
+	DumpBin  string `toml:"mysqldb_dump_bin"`
+	Prefix   string `toml:"mysqldb_prefix"`
+	Opt      string `toml:"mysqldb_opt""`
+	Excludes string `toml:"mysqldb_excludes" `
+}
 
 // wait: @feature/backup_files
 //type Files struct {
@@ -66,8 +74,10 @@ type Config struct {
 	TmpPath    string  `toml:"tmp_path"`
 	TargetPath string  `toml:"target_path"`
 	TimeZone   string  `toml:"time_zone"`
+	GzipBin    string  `toml:"gzip_bin"`
 	Remote     Remote  `toml:"remote"`
 	Mongo      Mongodb `toml:"mongodb"`
+	Mysql      Mysqldb `toml:"mysqldb"`
 }
 
 func NewConfig() *Config {
@@ -90,6 +100,15 @@ func NewConfig() *Config {
 			AuthMechanism: "SCRAM-SHA-256",
 			DumpBin:       "/usr/bin/mongodump",
 			Prefix:        "mgdb",
+		},
+		Mysql: Mysqldb{
+			Uri:      "mysql://127.0.0.1:3306",
+			Host:     "127.0.0.1",
+			Port:     3306,
+			DumpBin:  "/usr/bin/mysqldump",
+			Prefix:   "mysqldb",
+			Opt:      "--opt --single-transaction --default-character-set=utf8mb4",
+			Excludes: "information_schema,performance_schema",
 		},
 	}
 	_, err := toml.DecodeFile(configPath, &config)

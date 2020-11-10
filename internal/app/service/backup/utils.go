@@ -18,6 +18,7 @@ import (
 const (
 	CmdMongoDump = 0x82
 	CmdSftp      = 0x8C
+	//CmdMysqlDump = 0x96
 )
 
 type PrepareData struct {
@@ -52,6 +53,16 @@ func GetCurrentUnixTime(timeZone string) int64 {
 }
 
 func GetPrepareData(prefix string, config *cfg.Config) *PrepareData {
+	var ar string
+
+	switch prefix {
+	case config.Mysql.Prefix:
+		ar = ".sql.tgz"
+		break
+	default:
+		ar = ".tar.gz"
+	}
+
 	timeNow := GetCurrentTime(config.TimeZone)
 	dateLabel := fmt.Sprintf("%d-%d-%d_%d-%d-%d", timeNow.Year(), timeNow.Month(), timeNow.Day(),
 		timeNow.Hour(), timeNow.Minute(), timeNow.Second())
@@ -62,16 +73,16 @@ func GetPrepareData(prefix string, config *cfg.Config) *PrepareData {
 
 	if config.TargetPath != "" {
 		localPath = strings.TrimRight(config.TargetPath, "/") + "/" + dateLabel2Path + "/"
-		localArchivePath = fmt.Sprintf("%s%s.tag.gz", localPath, backupName)
+		localArchivePath = fmt.Sprintf("%s%s%s", localPath, backupName, ar)
 	}
 
 	if config.Remote.Path != "" && config.Remote.SshHost != "" && config.Remote.SshUser != "" {
 		remotePath = strings.TrimRight(config.Remote.Path, "/") + "/" + dateLabel2Path + "/"
-		remoteArchivePath = fmt.Sprintf("%s%s.tag.gz", remotePath, backupName)
+		remoteArchivePath = fmt.Sprintf("%s%s%s", remotePath, backupName, ar)
 	}
 
 	tmpPath = strings.TrimRight(config.TmpPath, "/") + "/singlebackuper/" + prefix + "/" + dateLabel2Path + "/"
-	tmpArchivePath = fmt.Sprintf("%s%s.tag.gz", tmpPath, backupName)
+	tmpArchivePath = fmt.Sprintf("%s%s%s", tmpPath, backupName, ar)
 
 	return &PrepareData{
 		timeNow,

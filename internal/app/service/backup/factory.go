@@ -10,6 +10,10 @@ func FactoryBackupModule(name string, config *cfg.Config) service.BackupModule {
 	case "mongodb":
 		return NewMongodbBackupModule(config)
 		break
+
+	case "mysqldb":
+		return NewMysqlBackupModule(config)
+		break
 	}
 
 	return NewNullBackupModule(config)

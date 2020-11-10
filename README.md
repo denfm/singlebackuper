@@ -1,7 +1,7 @@
 # SINGLE BACKUPER
 Creates backups, saves them to a local machine and/or remote SSH server. Backups of the following types are supported:
 - MongoDB > 4.0
-- (In developing) MySQL 
+- MySQL 
 - (In developing) Redis  
 - (In developing) Files (assets, images, etc..)
 
@@ -17,23 +17,21 @@ make test && make build && \
 cd bin && ls -la
 ```
 
-##Running
+## Running
 
 ```
-./singlebackuper --config-path=/etc/singlebackuper/singlebackuper.toml
+./singlebackuper --module=mongodb|mysqldb --config-path=/etc/singlebackuper/singlebackuper.toml
 ```
 
-##PLAN Release 1.0
+## PLAN Release 1.0
 - feature/rotation
 - feature/api (systemd service)
 
-##PLAN Release 2.0
+## PLAN Release 2.0
 - feature/prometheus_metrics_exporter
-- ?
 
-##PLAN Release 3.0
+## PLAN Release 3.0
 - feature/gui
-- ?
 
 LICENSE
 ========

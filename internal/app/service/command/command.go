@@ -1,8 +1,11 @@
 package command
 
 import (
+	"compress/gzip"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"io"
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -28,6 +31,41 @@ func (c *Command) Add2ArgAsSolo(d string, d2 string) {
 func (c *Command) Create() *exec.Cmd {
 	logrus.Debugf("Command <<<%s>>>", c.GetCommandString(true))
 	return exec.Command(c.Exec, c.Args...)
+}
+
+func (c *Command) ToGzip(pathFile string) error {
+	file, err := os.Create(pathFile)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	cmd := c.Create()
+	gzw := gzip.NewWriter(file)
+
+	defer gzw.Close()
+	defer gzw.Flush()
+
+	out, err := cmd.StdoutPipe()
+
+	if err != nil {
+		return err
+	}
+
+	err = cmd.Start()
+
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(gzw, out)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *Command) GetCommandString(clearPassword bool) string {
