@@ -1,4 +1,4 @@
-GO := /mnt/dev/golang/go1.15.3/bin/go
+GO := /usr/bin/go
 .PHONY: *
 
 build:
