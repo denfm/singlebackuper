@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
 	"log"
+	"os"
 )
 
 var configPath string
@@ -89,8 +90,8 @@ func NewConfig() *Config {
 		// wait: @feature/api BindAddr:   "127.0.0.1:8628",
 		// wait: @feature/rotation Rotation:   30,
 		LogLevel:   "info",
-		TmpPath:    "/tmp",
-		TargetPath: "/tmp/backup",
+		TmpPath:    os.TempDir(),
+		TargetPath: os.TempDir() + "/backup",
 		TimeZone:   "Europe/Moscow",
 		Remote: Remote{
 			SshPort: 22,
