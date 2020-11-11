@@ -32,3 +32,8 @@ mysqldb_database = "app"
 mysqldb_dump_bin = "/usr/bin/mysqldump"
 mysqldb_options = "--opt"
 mysqldb_excludes = "information_schema,performance_schema"
+
+[files]
+files_path = "<BACKUP_PATH>"
+files_prefix = "backup"
+files_exclude_path = "<path>/runtime,<path>/.git,<path>/.idea,<path>/log"

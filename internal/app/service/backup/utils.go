@@ -127,6 +127,8 @@ func MoveArchive(p *PrepareData, config *cfg.Config) error {
 			sourceArchivePath = p.TmpArchivePath
 		}
 
+		logrus.Infof("Start upload archive to remote server \"%s\".", config.Remote.SshHost)
+
 		err := command.SftpCommand(config, func(sftpClient *sftp.Client) error {
 			err := sftpClient.MkdirAll(p.RemotePath)
 
@@ -207,6 +209,14 @@ func CreateDirs(dirs []string) error {
 	}
 
 	return nil
+}
+
+func HasDir(dir string) bool {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		return false
+	}
+
+	return true
 }
 
 func CreateDirsByPrepareData(p *PrepareData) error {

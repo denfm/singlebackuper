@@ -43,14 +43,15 @@ type Mysqldb struct {
 	Database string `toml:"mysqldb_database"`
 	DumpBin  string `toml:"mysqldb_dump_bin"`
 	Prefix   string `toml:"mysqldb_prefix"`
-	Opt      string `toml:"mysqldb_opt""`
+	Opt      string `toml:"mysqldb_opt"`
 	Excludes string `toml:"mysqldb_excludes" `
 }
 
-// wait: @feature/backup_files
-//type Files struct {
-//
-//}
+type Files struct {
+	Path         string `toml:"files_path"`
+	Prefix       string `toml:"files_prefix"`
+	ExcludesPath string `toml:"files_exclude_path"`
+}
 
 // wait: @feature/backup_clickhouse
 //type Clickhouse struct {
@@ -78,6 +79,7 @@ type Config struct {
 	Remote     Remote  `toml:"remote"`
 	Mongo      Mongodb `toml:"mongodb"`
 	Mysql      Mysqldb `toml:"mysqldb"`
+	Files      Files   `toml:"files"`
 }
 
 func NewConfig() *Config {
@@ -109,6 +111,9 @@ func NewConfig() *Config {
 			Prefix:   "mysqldb",
 			Opt:      "--opt --single-transaction --default-character-set=utf8mb4",
 			Excludes: "information_schema,performance_schema",
+		},
+		Files: Files{
+			Prefix: "backup",
 		},
 	}
 	_, err := toml.DecodeFile(configPath, &config)
