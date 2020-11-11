@@ -12,9 +12,10 @@ func main() {
 	moduleNameArg := flag.String("module", "null", "Name of backup module")
 	flag.Parse()
 
+	config := cfg.NewConfig()
 	logrus.Infof("Running backup from module \"%s\"", *moduleNameArg)
 
-	module := backup.FactoryBackupModule(*moduleNameArg, cfg.NewConfig())
+	module := backup.FactoryBackupModule(*moduleNameArg, config)
 	res := module.Backup()
 
 	if res.Err != nil {
