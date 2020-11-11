@@ -15,6 +15,9 @@ func FactoryBackupModule(name string, config *cfg.Config) service.BackupModule {
 
 	case "files":
 		return NewFilesBackupModule(config)
+
+	case "clickhouse":
+		return NewClickhouseBackupModule(config)
 	}
 
 	return NewNullBackupModule(config)

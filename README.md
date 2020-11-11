@@ -1,9 +1,9 @@
 # SINGLE BACKUPER
 Creates backups, saves them to a local machine and/or remote SSH server. Backups of the following types are supported:
-- MongoDB > 4.0
+- MongoDB
 - MySQL 
-- (In developing) Redis  
-- (In developing) Files (assets, images, etc..)
+- Clickhouse
+- Files
 
 ## BUILD 
 Requires [Go](https://golang.org/doc/install). Tested with Go 1.15.
@@ -20,7 +20,8 @@ cd bin && ls -la
 ## Running
 
 ```
-./singlebackuper --module=mongodb|mysqldb --config-path=/etc/singlebackuper/singlebackuper.toml
+# module=mongodb|mysqldb|files|clickhouse
+./singlebackuper --module=mongodb --config-path=/etc/singlebackuper/singlebackuper.toml
 ```
 
 ## PLAN Release 1.0

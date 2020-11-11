@@ -9,11 +9,30 @@ import (
 	"strings"
 )
 
-func Compress(path string, buf io.Writer, excludesPath []string) error {
+func Compress(paths []string, buf io.Writer, excludesPath []string) error {
 	// tar > gzip > buf
 	zr := gzip.NewWriter(buf)
 	tw := tar.NewWriter(zr)
 
+	for _, path := range paths {
+		err := compressWalk(path, tw, excludesPath)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := tw.Close(); err != nil {
+		return err
+	}
+
+	if err := zr.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compressWalk(path string, tw *tar.Writer, excludesPath []string) error {
 	err := filepath.Walk(path, func(file string, fi os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -71,17 +90,5 @@ func Compress(path string, buf io.Writer, excludesPath []string) error {
 		return nil
 	})
 
-	if err != nil {
-		return err
-	}
-
-	if err := tw.Close(); err != nil {
-		return err
-	}
-
-	if err := zr.Close(); err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

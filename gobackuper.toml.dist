@@ -37,3 +37,9 @@ mysqldb_excludes = "information_schema,performance_schema"
 files_path = "<BACKUP_PATH>"
 files_prefix = "backup"
 files_exclude_path = "<path>/runtime,<path>/.git,<path>/.idea,<path>/log"
+
+[clickhouse]
+clickhouse_uri = "tcp://127.0.0.1:9000"
+clickhouse_databases = "app"
+clickhouse_prefix = "clickhouse"
+clickhouse_lib_path = "/var/lib/clickhouse/"

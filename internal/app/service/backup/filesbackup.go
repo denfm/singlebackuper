@@ -60,7 +60,7 @@ func (g *FilesBackupModule) Backup() *service.BackupModuleResult {
 	logrus.Infof("Start backup directory \"%s\". Symlink support: off.", path)
 
 	var buf bytes.Buffer
-	err = lib.Compress(path, &buf, strings.Split(g.config.Files.ExcludesPath, ","))
+	err = lib.Compress([]string{path}, &buf, strings.Split(g.config.Files.ExcludesPath, ","))
 
 	if err != nil {
 		res.Err = err

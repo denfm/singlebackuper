@@ -54,33 +54,26 @@ type Files struct {
 	ExcludesPath string `toml:"files_exclude_path"`
 }
 
-// wait: @feature/backup_clickhouse
-//type Clickhouse struct {
-//
-//}
-
-// wait: @feature/backup_redis
-//type Redis struct {
-//
-//}
-
-// wait: @feature/backup_sphinx
-//type Sphinx struct {
-//
-//}
+type Clickhouse struct {
+	Uri       string `toml:"clickhouse_uri"`
+	Prefix    string `toml:"clickhouse_prefix"`
+	Databases string `toml:"clickhouse_databases"`
+	LibPath   string `toml:"clickhouse_lib_path"`
+}
 
 type Config struct {
-	BindAddr   string  `toml:"bind_address"`
-	LogLevel   string  `toml:"log_level"`
-	Rotation   int     `toml:"rotation"`
-	TmpPath    string  `toml:"tmp_path"`
-	TargetPath string  `toml:"target_path"`
-	TimeZone   string  `toml:"time_zone"`
-	GzipBin    string  `toml:"gzip_bin"`
-	Remote     Remote  `toml:"remote"`
-	Mongo      Mongodb `toml:"mongodb"`
-	Mysql      Mysqldb `toml:"mysqldb"`
-	Files      Files   `toml:"files"`
+	BindAddr   string     `toml:"bind_address"`
+	LogLevel   string     `toml:"log_level"`
+	Rotation   int        `toml:"rotation"`
+	TmpPath    string     `toml:"tmp_path"`
+	TargetPath string     `toml:"target_path"`
+	TimeZone   string     `toml:"time_zone"`
+	GzipBin    string     `toml:"gzip_bin"`
+	Remote     Remote     `toml:"remote"`
+	Mongo      Mongodb    `toml:"mongodb"`
+	Mysql      Mysqldb    `toml:"mysqldb"`
+	Files      Files      `toml:"files"`
+	Clickhouse Clickhouse `toml:"clickhouse"`
 }
 
 func NewConfig() *Config {
@@ -115,6 +108,11 @@ func NewConfig() *Config {
 		},
 		Files: Files{
 			Prefix: "backup",
+		},
+		Clickhouse: Clickhouse{
+			Uri:     "tcp://127.0.0.1:9000",
+			Prefix:  "clickhouse",
+			LibPath: "/var/lib/clickhouse/",
 		},
 	}
 	_, err := toml.DecodeFile(configPath, &config)
