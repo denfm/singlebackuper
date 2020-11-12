@@ -42,7 +42,7 @@ func compressWalk(path string, tw *tar.Writer, excludesPath []string) error {
 			return nil
 		}
 
-		name := strings.TrimPrefix(file, path)
+		name := strings.TrimLeft(strings.TrimPrefix(file, path), "/")
 		isDir := fi.IsDir()
 
 		if len(excludesPath) > 0 {
