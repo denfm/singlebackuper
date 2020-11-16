@@ -25,7 +25,7 @@ func (g *ClickhouseBackupModule) Backup() *service.BackupModuleResult {
 	res := &service.BackupModuleResult{}
 	libPath := strings.TrimSpace(g.config.Clickhouse.LibPath)
 
-	if !HasDir(libPath) {
+	if !service.HasDir(libPath) {
 		res.Err = fmt.Errorf("invalid clickhouse libPath \"%s\"", libPath)
 		return res
 	}
@@ -87,18 +87,26 @@ func (g *ClickhouseBackupModule) Backup() *service.BackupModuleResult {
 	metaPath := fmt.Sprintf("%smetadata/", libPath)
 	shadowPath := fmt.Sprintf("%sshadow/", libPath)
 
-	if !HasDir(metaPath) {
+	if !service.HasDir(metaPath) {
 		res.Err = fmt.Errorf("invalid clickhouse metaPath \"%s\"", metaPath)
 		return res
 	}
 
-	if !HasDir(shadowPath) {
+	if !service.HasDir(shadowPath) {
 		res.Err = fmt.Errorf("invalid clickhouse shadowPath \"%s\"", shadowPath)
 		return res
 	}
 
 	var buf bytes.Buffer
-	err = lib.Compress([]string{metaPath, shadowPath}, &buf, []string{})
+
+	compressOptions := &lib.CompressOptions{
+		Paths:        []string{metaPath, shadowPath},
+		Buf:          &buf,
+		ExcludesPath: []string{},
+		IsMultiType:  true,
+	}
+
+	err = lib.Compress(compressOptions)
 
 	if err != nil {
 		res.Err = err

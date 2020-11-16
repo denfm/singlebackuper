@@ -27,16 +27,6 @@ func (g *FilesBackupModule) Backup() *service.BackupModuleResult {
 		return res
 	}
 
-	if !HasDir(g.config.Files.Path) {
-		res.Err = fmt.Errorf("the specified backup directory \"%s\" does not exist", path)
-		return res
-	}
-
-	if path == "/" {
-		res.Err = fmt.Errorf("bad path")
-		return res
-	}
-
 	prepareData := GetPrepareData(g.config.Files.Prefix, g.config)
 	err := CreateDirsByPrepareData(prepareData)
 
@@ -60,7 +50,15 @@ func (g *FilesBackupModule) Backup() *service.BackupModuleResult {
 	logrus.Infof("Start backup directory \"%s\". Symlink support: off.", path)
 
 	var buf bytes.Buffer
-	err = lib.Compress([]string{path}, &buf, strings.Split(g.config.Files.ExcludesPath, ","))
+
+	compressOptions := &lib.CompressOptions{
+		Paths:        strings.Split(path, ","),
+		Buf:          &buf,
+		ExcludesPath: strings.Split(g.config.Files.ExcludesPath, ","),
+		IsMultiType:  true,
+	}
+
+	err = lib.Compress(compressOptions)
 
 	if err != nil {
 		res.Err = err

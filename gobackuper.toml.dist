@@ -34,9 +34,9 @@ mysqldb_options = "--opt"
 mysqldb_excludes = "information_schema,performance_schema"
 
 [files]
-files_path = "<BACKUP_PATH>"
+files_path = "<BACKUP_PATH1>,<BACKUP_PATH2>,..."
 files_prefix = "backup"
-files_exclude_path = "<path>/runtime,<path>/.git,<path>/.idea,<path>/log"
+files_exclude_path = "<path>/runtime,<path>/.git,<path>/.idea,<path>/log,..."
 
 [clickhouse]
 clickhouse_uri = "tcp://127.0.0.1:9000"

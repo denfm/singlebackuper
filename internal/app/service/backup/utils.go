@@ -211,14 +211,6 @@ func CreateDirs(dirs []string) error {
 	return nil
 }
 
-func HasDir(dir string) bool {
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
-}
-
 func CreateDirsByPrepareData(p *PrepareData) error {
 	localDirs := []string{p.TmpPath}
 

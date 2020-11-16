@@ -2,20 +2,38 @@ package lib
 
 import (
 	"archive/tar"
+	"bytes"
 	"compress/gzip"
+	"fmt"
+	"github.com/denfm/singlebackuper/internal/app/service"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-func Compress(paths []string, buf io.Writer, excludesPath []string) error {
+type CompressOptions struct {
+	Paths        []string
+	Buf          *bytes.Buffer
+	ExcludesPath []string
+	IsMultiType  bool
+}
+
+func Compress(opt *CompressOptions) error {
 	// tar > gzip > buf
-	zr := gzip.NewWriter(buf)
+	zr := gzip.NewWriter(opt.Buf)
 	tw := tar.NewWriter(zr)
 
-	for _, path := range paths {
-		err := compressWalk(path, tw, excludesPath)
+	for _, path := range opt.Paths {
+		if !service.HasDir(path) {
+			return fmt.Errorf("the specified backup directory \"%s\" does not exist", path)
+		}
+
+		if path == "/" {
+			return fmt.Errorf("bad path")
+		}
+
+		err := compressWalk(path, tw, opt)
 		if err != nil {
 			return err
 		}
@@ -32,7 +50,7 @@ func Compress(paths []string, buf io.Writer, excludesPath []string) error {
 	return nil
 }
 
-func compressWalk(path string, tw *tar.Writer, excludesPath []string) error {
+func compressWalk(path string, tw *tar.Writer, opt *CompressOptions) error {
 	err := filepath.Walk(path, func(file string, fi os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -42,11 +60,19 @@ func compressWalk(path string, tw *tar.Writer, excludesPath []string) error {
 			return nil
 		}
 
-		name := strings.TrimLeft(strings.TrimPrefix(file, path), "/")
+		var name string
+
+		if opt.IsMultiType {
+			pathExplode := strings.Split(strings.TrimLeft(file, "/"), "/")
+			name = fmt.Sprintf("%s/%s", pathExplode[len(pathExplode)-2], fi.Name())
+		} else {
+			name = strings.TrimLeft(strings.TrimPrefix(file, path), "/")
+		}
+
 		isDir := fi.IsDir()
 
-		if len(excludesPath) > 0 {
-			for _, exName := range excludesPath {
+		if len(opt.ExcludesPath) > 0 {
+			for _, exName := range opt.ExcludesPath {
 				if isDir && exName == name {
 					return filepath.SkipDir
 				}

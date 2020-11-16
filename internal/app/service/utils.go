@@ -2,6 +2,7 @@ package service
 
 import (
 	"math/rand"
+	"os"
 	"time"
 )
 
@@ -18,4 +19,12 @@ func RandStringRunes(n int) string {
 		b[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 	return string(b)
+}
+
+func HasDir(dir string) bool {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		return false
+	}
+
+	return true
 }
