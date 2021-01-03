@@ -81,7 +81,7 @@ func NewConfig() *Config {
 
 	config := &Config{
 		// wait: @feature/api BindAddr:   "127.0.0.1:8628",
-		// wait: @feature/rotation Rotation:   30,
+		Rotation:   -10,
 		LogLevel:   "info",
 		TmpPath:    os.TempDir(),
 		TargetPath: os.TempDir() + "/backup",

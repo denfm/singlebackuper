@@ -22,6 +22,7 @@ cd bin && ls -la
 ```
 # module=mongodb|mysqldb|files|clickhouse
 ./singlebackuper --module=mongodb --config-path=/etc/singlebackuper/singlebackuper.toml
+./singlebackuper-cleaner --config-path=/etc/singlebackuper/singlebackuper.toml
 ```
 
 ## PLAN Release 1.0

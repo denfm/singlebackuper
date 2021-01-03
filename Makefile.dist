@@ -1,8 +1,11 @@
 GO := /usr/bin/go
 .PHONY: *
 
-build:
+build-backups:
 	@$(GO) build -v -o ./bin/singlebackuper ./cmd/backup
+build-cleaner:
+	@$(GO) build -v -o ./bin/singlebackuper-cleaner ./cmd/cleaner
+build: build-backups build-cleaner
 
 test:
 	@$(GO) test -v -race -timeout 30s ./...

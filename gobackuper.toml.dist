@@ -1,4 +1,5 @@
 log_level = "debug"
+rotation = -7
 tmp_path = "/tmp"
 target_path = "/tmp"
 time_zone = "Europe/Moscow"
