@@ -141,7 +141,7 @@ func (c *Cleaner) cleanLocal(k int) error {
 }
 
 func (c *Cleaner) cleanRemote(k int) error {
-	remotePath := c.config.Remote.Path + "/" + c.paths[k].Path
+	remotePath := c.paths[k].Path
 
 	err := command.SftpCommand(c.config, func(sftpClient *sftp.Client) error {
 		logrus.Infof(`Work remote dir "%s".`, remotePath)
