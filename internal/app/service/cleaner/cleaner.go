@@ -131,48 +131,6 @@ func (c *Cleaner) cleanLocal(k int) error {
 	return nil
 }
 
-func (c *Cleaner) removeEmptyLocalDirs(k int) error {
-	cleanPath := c.paths[k].Path
-
-	if !service.HasDir(cleanPath) {
-		return nil
-	}
-
-	err := filepath.Walk(cleanPath, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if !info.IsDir() {
-			return nil
-		}
-
-		files, err := ioutil.ReadDir(path)
-
-		if err != nil {
-			return err
-		}
-
-		if len(files) != 0 {
-			return nil
-		}
-
-		err = os.Remove(path)
-
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (c *Cleaner) cleanRemote(k int) error {
 	remotePath := c.config.Remote.Path + "/" + c.paths[k].Path
 
