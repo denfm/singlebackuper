@@ -62,18 +62,19 @@ type Clickhouse struct {
 }
 
 type Config struct {
-	BindAddr   string     `toml:"bind_address"`
-	LogLevel   string     `toml:"log_level"`
-	Rotation   int        `toml:"rotation"`
-	TmpPath    string     `toml:"tmp_path"`
-	TargetPath string     `toml:"target_path"`
-	TimeZone   string     `toml:"time_zone"`
-	GzipBin    string     `toml:"gzip_bin"`
-	Remote     Remote     `toml:"remote"`
-	Mongo      Mongodb    `toml:"mongodb"`
-	Mysql      Mysqldb    `toml:"mysqldb"`
-	Files      Files      `toml:"files"`
-	Clickhouse Clickhouse `toml:"clickhouse"`
+	BindAddr        string     `toml:"bind_address"`
+	LogLevel        string     `toml:"log_level"`
+	Rotation        int        `toml:"rotation"`
+	RotationEnabled bool       `toml:"rotation_enabled"`
+	TmpPath         string     `toml:"tmp_path"`
+	TargetPath      string     `toml:"target_path"`
+	TimeZone        string     `toml:"time_zone"`
+	GzipBin         string     `toml:"gzip_bin"`
+	Remote          Remote     `toml:"remote"`
+	Mongo           Mongodb    `toml:"mongodb"`
+	Mysql           Mysqldb    `toml:"mysqldb"`
+	Files           Files      `toml:"files"`
+	Clickhouse      Clickhouse `toml:"clickhouse"`
 }
 
 func NewConfig() *Config {
@@ -81,11 +82,12 @@ func NewConfig() *Config {
 
 	config := &Config{
 		// wait: @feature/api BindAddr:   "127.0.0.1:8628",
-		Rotation:   -10,
-		LogLevel:   "info",
-		TmpPath:    os.TempDir(),
-		TargetPath: os.TempDir() + "/backup",
-		TimeZone:   "Europe/Moscow",
+		Rotation:        -10,
+		RotationEnabled: true,
+		LogLevel:        "info",
+		TmpPath:         os.TempDir(),
+		TargetPath:      os.TempDir() + "/backup",
+		TimeZone:        "Europe/Moscow",
 		Remote: Remote{
 			SshPort: 22,
 		},

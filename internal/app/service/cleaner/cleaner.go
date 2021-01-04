@@ -43,6 +43,10 @@ func (c *Cleaner) Clean() error {
 	utLabel := c.until.Format("2006-01-02 15:04:05")
 	logrus.Infof(`Delete files with a creation date older than "%s".`, utLabel)
 
+	if !c.config.RotationEnabled {
+		logrus.Warn(`Real file rotation is disabled in the config. Only logs are output (simulation).`)
+	}
+
 	for k, p := range c.paths {
 		if p.IsRemote {
 			err := c.cleanRemote(k)
@@ -96,10 +100,13 @@ func (c *Cleaner) cleanLocal(k int) error {
 		}
 
 		logrus.Infof(`Remove local file "%s".`, path)
-		err = os.Remove(path)
 
-		if err != nil {
-			return err
+		if c.config.RotationEnabled {
+			err = os.Remove(path)
+
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
@@ -119,10 +126,12 @@ func (c *Cleaner) cleanLocal(k int) error {
 
 			if len(files) == 0 {
 				logrus.Infof(`Remove empty local dir "%s".`, dir)
-				err = os.RemoveAll(dir)
+				if c.config.RotationEnabled {
+					err = os.RemoveAll(dir)
 
-				if err != nil {
-					return err
+					if err != nil {
+						return err
+					}
 				}
 			}
 		}
@@ -152,10 +161,12 @@ func (c *Cleaner) cleanRemote(k int) error {
 
 			if len(files) == 0 {
 				logrus.Infof(`Remove empty remote dir "%s".`, dir)
-				err = sftpClient.RemoveDirectory(dir)
+				if c.config.RotationEnabled {
+					err = sftpClient.RemoveDirectory(dir)
 
-				if err != nil {
-					return err
+					if err != nil {
+						return err
+					}
 				}
 			}
 		}
@@ -219,10 +230,12 @@ func (c *Cleaner) remoteRecursiveList(dir string, sftpClient *sftp.Client) (erro
 		}
 
 		logrus.Infof(`Remove remote file "%s".`, filePath)
-		err := sftpClient.Remove(filePath)
+		if c.config.RotationEnabled {
+			err := sftpClient.Remove(filePath)
 
-		if err != nil {
-			return err, dirs
+			if err != nil {
+				return err, dirs
+			}
 		}
 	}
 

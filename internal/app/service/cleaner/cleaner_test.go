@@ -49,6 +49,7 @@ func makeTestData(t *testing.T) testData {
 	config := &cfg.Config{}
 	config.TmpPath = tmpPath
 	config.TimeZone = "Europe/Moscow"
+	config.RotationEnabled = true
 
 	return testData{config, tmpPath, appPath}
 }
@@ -113,6 +114,7 @@ func TestLocalCleanerByFutureTime(t *testing.T) {
 //	config := &cfg.Config{}
 //	config.TmpPath = tmpPath
 //	config.TimeZone = "Europe/Moscow"
+//  config.RotationEnabled = true
 //	config.Remote = cfg.Remote{
 //		SshHost:     "<host>",
 //		SshUser:     "login",
