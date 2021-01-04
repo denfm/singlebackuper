@@ -62,6 +62,7 @@ type Clickhouse struct {
 }
 
 type Config struct {
+	Name            string     `toml:"name"`
 	BindAddr        string     `toml:"bind_address"`
 	LogLevel        string     `toml:"log_level"`
 	Rotation        int        `toml:"rotation"`
@@ -82,6 +83,7 @@ func NewConfig() *Config {
 
 	config := &Config{
 		// wait: @feature/api BindAddr:   "127.0.0.1:8628",
+		Name:            "bck",
 		Rotation:        -10,
 		RotationEnabled: true,
 		LogLevel:        "info",

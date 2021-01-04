@@ -33,8 +33,8 @@ type PrepareData struct {
 	TmpArchivePath    string
 }
 
-func GetStateUniqueName(name string, config *cfg.Config) string {
-	return fmt.Sprintf("gobackuper_state_%s_%d.tmp", name, GetCurrentUnixTime(config.TimeZone))
+func GetStateUniqueName(component string, config *cfg.Config) string {
+	return fmt.Sprintf("singlebackuper_state_%s_%s_%d.tmp", config.Name, component, GetCurrentUnixTime(config.TimeZone))
 }
 
 func GetCurrentTime(timeZone string) time.Time {
