@@ -2,8 +2,8 @@ name = "bck"
 log_level = "debug"
 rotation = -7
 rotation_enabled = true
-tmp_path = "/tmp"
-target_path = "/tmp"
+tmp_path = "/tmp/"
+target_path = "/tmp/"
 time_zone = "Europe/Moscow"
 
 [remote]
