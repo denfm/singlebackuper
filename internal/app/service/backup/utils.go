@@ -64,9 +64,42 @@ func GetPrepareData(prefix string, config *cfg.Config) *PrepareData {
 	}
 
 	timeNow := GetCurrentTime(config.TimeZone)
-	dateLabel := fmt.Sprintf("%d-%d-%d_%d-%d-%d", timeNow.Year(), timeNow.Month(), timeNow.Day(),
-		timeNow.Hour(), timeNow.Minute(), timeNow.Second())
-	dateLabel2Path := fmt.Sprintf("%d%d%d", timeNow.Year(), timeNow.Month(), timeNow.Day())
+
+	var tStringMonth, tStringDay, tStringHour, tStringMinute, tStringSecond string
+
+	if timeNow.Month() < 10 {
+		tStringMonth = fmt.Sprintf(`0%d`, timeNow.Month())
+	} else {
+		tStringMonth = fmt.Sprintf(`%d`, timeNow.Month())
+	}
+
+	if timeNow.Day() < 10 {
+		tStringDay = fmt.Sprintf(`0%d`, timeNow.Day())
+	} else {
+		tStringDay = fmt.Sprintf(`%d`, timeNow.Day())
+	}
+
+	if timeNow.Hour() < 10 {
+		tStringHour = fmt.Sprintf(`0%d`, timeNow.Hour())
+	} else {
+		tStringHour = fmt.Sprintf(`%d`, timeNow.Hour())
+	}
+
+	if timeNow.Minute() < 10 {
+		tStringMinute = fmt.Sprintf(`0%d`, timeNow.Minute())
+	} else {
+		tStringMinute = fmt.Sprintf(`%d`, timeNow.Minute())
+	}
+
+	if timeNow.Second() < 10 {
+		tStringSecond = fmt.Sprintf(`0%d`, timeNow.Second())
+	} else {
+		tStringSecond = fmt.Sprintf(`%d`, timeNow.Second())
+	}
+
+	dateLabel := fmt.Sprintf("%d-%s-%s_%s-%s-%s", timeNow.Year(), tStringMonth, tStringDay,
+		tStringHour, tStringMinute, tStringSecond)
+	dateLabel2Path := fmt.Sprintf("%d%s%s", timeNow.Year(), tStringMonth, tStringDay)
 	backupName := prefix + dateLabel
 
 	var localPath, remotePath, tmpPath, localArchivePath, remoteArchivePath, tmpArchivePath string
